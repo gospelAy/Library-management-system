@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'book'
-    'rest_framework'
+    'book',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'librarymanagementsystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'lib_management_db',
+        'USER': 'root',
+        'PASSWORD': 'glory12345-6',
+        'HOST': 'localhost',
+        'PORT': 3306,
     }
 }
 

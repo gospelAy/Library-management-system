@@ -3,27 +3,42 @@ from django.db import models
 
 # Create your models here.
 
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.ForeignKey('Author', on_delete=models.CASCADE)
-    summary = models.CharField(max_length=255)
-    isbn = models.CharField(max_length=11)
-    genre = models.ForeignKey('Genre', on_delete=models.PROTECT)
-    language = models.ForeignKey('Language', on_delete=models.PROTECT)
-
 
 class Author(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    date_of_birth = models.DateField()
-    date_of_death = models.DateField()
+    first_name = models.CharField(max_length=255, blank=False, null=False)
+    last_name = models.CharField(max_length=155, blank=False, null=False)
+    email = models.EmailField(blank=True, null=False)
+    date_of_birth = models.DateTimeField(blank=True, null=True)
+    date_of_death = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.last_name} {self.first_name}"
 
 
-class Language(models.Model):
-    name = models.CharField(max_length=255)
+class Book(models.Model):
+    LANGUAGE_CHOICES = [
+        ("YORUBA", "Y"),
+        ('ENGLISH', "E"),
+        ('IBO', "I"),
+        ('ENGLISH', "E"),
+    ]
+    GENRE_CHOICE = [
+        ('FICTION', "FIC"),
+        ('POLITICS', "POL"),
+        ('FINANCE', "FIN"),
+        ('ROMANCE', "ROM"),
+    ]
+    tittle = models.CharField(max_length=255, blank=False, null=False)
+    author = models.ForeignKey('Author', on_delete=models.CASCADE)
+    isbn = models.CharField(max_length=13, blank=False, null=False)
+    description = models.CharField(max_length=255, blank=False, null=False)
+    date_added = models.DateTimeField(blank=True, null=True)
+    genre = models.CharField(max_length=15, choices=GENRE_CHOICE)
+    language = models.CharField(max_length=15, choices=LANGUAGE_CHOICES)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
 
-
-class Genre(models.Model):
-    name = models.CharField(max_length=55)
+    def __str__(self):
+        return f"{self.tittle} {self.author} {self.author}"
 
 
 class BookInstance(models.Model):
@@ -32,7 +47,7 @@ class BookInstance(models.Model):
         ('BORROWED', 'B')
     ]
     due_back = models.DateField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     imprint = models.CharField(max_length=55)
     borrower = ""
